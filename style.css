@@ -1,59 +1,137 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    background-color: #f0f2f5;
     display: flex;
     justify-content: center;
-    padding-top: 50px;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
 }
 
 .container {
-    background: white;
-    padding: 20px 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    width: 350px;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 450px;
     text-align: center;
 }
 
-#jam {
-    font-size: 24px;
-    font-weight: bold;
-    margin: 15px 0;
-    color: #333;
+h2 {
+    color: #1a73e8;
+    margin-bottom: 8px;
+    font-size: 22px;
 }
 
-input {
-    width: 90%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+.welcome-text {
+    color: #5f6368;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+#jam {
+    font-size: 32px;
+    font-weight: bold;
+    color: #202124;
+    background: #e8f0fe;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 15px;
 }
 
 button {
-    width: 97%;
-    padding: 10px;
-    background-color: #28a745;
-    color: white;
+    width: 100%;
+    padding: 12px;
     border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #218838;
-}
-
-ul {
-    list-style: none;
-    padding: 0;
-    text-align: left;
-}
-
-li {
-    background: #e9ecef;
-    margin-bottom: 5px;
-    padding: 8px;
-    border-radius: 4px;
+    border-radius: 6px;
+    font-weight: 600;
     font-size: 14px;
+    cursor: pointer;
+    transition: transform 0.1s ease, background-color 0.2s;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+#btnMasuk {
+    background-color: #34a853;
+    color: white;
+}
+
+#btnMasuk:hover {
+    background-color: #2d9247;
+}
+
+#btnKeluar {
+    background-color: #fbbc04;
+    color: #202124;
+}
+
+#btnKeluar:hover {
+    background-color: #e5ab00;
+}
+
+#btnLogout {
+    background-color: #dc3545;
+    color: white;
+    margin-bottom: 25px;
+}
+
+#btnLogout:hover {
+    background-color: #c82333;
+}
+
+.history-section {
+    text-align: left;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 20px;
+}
+
+.history-section h3 {
+    font-size: 16px;
+    color: #3c4043;
+    margin-bottom: 12px;
+}
+
+ul#daftarHadir {
+    list-style: none;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+ul#daftarHadir li {
+    background: #f8f9fa;
+    border-left: 4px solid #1a73e8;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.badge-masuk {
+    color: #34a853;
+    font-weight: bold;
+}
+
+.badge-keluar {
+    color: #d93025;
+    font-weight: bold;
 }
