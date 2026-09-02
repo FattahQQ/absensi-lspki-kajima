@@ -75,4 +75,32 @@ if (window.location.pathname.includes('dashboard.html')) {
 
     // Muat riwayat awal
     muatRiwayatAbsen();
+// Export CSV
+    function exportKeCSV() {
+        const dataAbsen = JSON.parse(localStorage.getItem('riwayat_' + sessionUser)) || [];
+
+        if (dataAbsen.length === 0) {
+            alert('Belum ada data riwayat absensi untuk di-export!');
+            return;
+        }
+
+        let csvContent = "data:text/csv;charset=utf-8,Tipe,Tanggal,Waktu,Status\n";
+
+        dataAbsen.forEach(row => {
+            csvContent += `${row.tipe},${row.tanggal},${row.waktu},${row.status}\n`;
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `Rekap_Absensi_${sessionUser}.csv`);
+        document.body.appendChild(link);
+        
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    document.getElementById('btnExport').addEventListener('click', exportKeCSV);
+
 }
+
