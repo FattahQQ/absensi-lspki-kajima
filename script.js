@@ -1,68 +1,15 @@
-// Navigasi Form Login/Register
-const formLogin = document.getElementById('formLogin');
-const formRegister = document.getElementById('formRegister');
-const toRegister = document.getElementById('toRegister');
-const toLogin = document.getElementById('toLogin');
-
-if (toRegister) {
-    toRegister.addEventListener('click', (e) => {
-        e.preventDefault();
-        formLogin.classList.add('hidden');
-        formRegister.classList.remove('hidden');
-    });
-}
-
-if (toLogin) {
-    toLogin.addEventListener('click', (e) => {
-        e.preventDefault();
-        formRegister.classList.add('hidden');
-        formLogin.classList.remove('hidden');
-    });
-}
-
-// Simulasi Simpan Akun di LocalStorage
-if (formRegister) {
-    formRegister.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const nama = document.getElementById('regNama').value;
-        const email = document.getElementById('regEmail').value;
-        const password = document.getElementById('regPassword').value;
-
-        localStorage.setItem('user_' + email, JSON.stringify({ nama, email, password }));
-        alert('Pendaftaran berhasil! Silakan login.');
-        formRegister.classList.add('hidden');
-        formLogin.classList.remove('hidden');
-    });
-}
-
-// Proses Login
-if (formLogin) {
-    formLogin.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
-
-        const userData = JSON.parse(localStorage.getItem('user_' + email));
-
-        if (userData && userData.password === password) {
-            localStorage.setItem('sessionUser', userData.nama);
-            window.location.href = 'dashboard.html';
-        } else {
-            alert('Email atau Password salah!');
-        }
-    });
-}
-
-// Logika Halaman Dashboard
+// Cek Sesi Login saat halaman Dashboard dibuka
 if (window.location.pathname.includes('dashboard.html')) {
     const sessionUser = localStorage.getItem('sessionUser');
+    
+    // Jika belum login, tendang kembali ke halaman Login
     if (!sessionUser) {
         window.location.href = 'index.html';
     } else {
         document.getElementById('userNama').innerText = sessionUser;
     }
 
-    // Update Jam Real-time
+    // Jam Real-time
     function updateJam() {
         const sekarang = new Date();
         const elJam = document.getElementById('jam');
@@ -71,21 +18,61 @@ if (window.location.pathname.includes('dashboard.html')) {
     setInterval(updateJam, 1000);
     updateJam();
 
-    // Absen Masuk
-    const formAbsen = document.getElementById('formAbsen');
-    if (formAbsen) {
-        formAbsen.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const waktu = new Date().toLocaleTimeString('id-ID');
+    // Tampilkan Riwayat Absen dari LocalStorage
+    function muatRiwayatAbsen() {
+        const daftarHadir = document.getElementById('daftarHadir');
+        daftarHadir.innerHTML = '';
+        const dataAbsen = JSON.parse(localStorage.getItem('riwayat_' + sessionUser)) || [];
+        
+        if (dataAbsen.length === 0) {
+            daftarHadir.innerHTML = '<li style="border-left: 4px solid #6c757d; color: #6c757d;">Belum ada riwayat absensi.</li>';
+            return;
+        }
+
+        dataAbsen.forEach(item => {
             const li = document.createElement('li');
-            li.innerHTML = `<b>${sessionUser}</b> - Absen pada ${waktu}`;
-            document.getElementById('daftarHadir').appendChild(li);
+            const warnaBadge = item.status === 'Terlambat' ? '#d93025' : '#34a853';
+            
+            li.innerHTML = `
+                <div>
+                    <b>[${item.tipe}]</b> <small>${item.tanggal} - ${item.waktu}</small>
+                </div>
+                <span style="color: ${warnaBadge}; font-weight: bold; font-size: 12px;">${item.status}</span>
+            `;
+            daftarHadir.appendChild(li);
         });
     }
+
+    // Fungsi Catat Absen dengan Validasi Jam
+    function catatAbsen(tipe) {
+        const sekarang = new Date();
+        const tanggal = sekarang.toLocaleDateString('id-ID');
+        const waktu = sekarang.toLocaleTimeString('id-ID');
+        const jamSekarang = sekarang.getHours();
+
+        let status = 'Selesai';
+        if (tipe === 'MASUK') {
+            // Batas jam masuk adalah 08:00
+            status = jamSekarang >= 8 ? 'Terlambat' : 'Tepat Waktu';
+        }
+
+        const dataAbsen = JSON.parse(localStorage.getItem('riwayat_' + sessionUser)) || [];
+        dataAbsen.unshift({ tipe, tanggal, waktu, status }); // Tambah ke paling atas
+        
+        localStorage.setItem('riwayat_' + sessionUser, JSON.stringify(dataAbsen));
+        muatRiwayatAbsen();
+    }
+
+    // Event Listener
+    document.getElementById('btnMasuk').addEventListener('click', () => catatAbsen('MASUK'));
+    document.getElementById('btnKeluar').addEventListener('click', () => catatAbsen('KELUAR'));
 
     // Logout
     document.getElementById('btnLogout').addEventListener('click', () => {
         localStorage.removeItem('sessionUser');
         window.location.href = 'index.html';
     });
+
+    // Muat riwayat awal
+    muatRiwayatAbsen();
 }
