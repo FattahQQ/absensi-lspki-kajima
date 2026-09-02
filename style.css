@@ -125,13 +125,3 @@ ul#daftarHadir li {
     justify-content: space-between;
     align-items: center;
 }
-
-.badge-masuk {
-    color: #34a853;
-    font-weight: bold;
-}
-
-.badge-keluar {
-    color: #d93025;
-    font-weight: bold;
-}
