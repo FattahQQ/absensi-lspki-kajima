@@ -11,6 +11,9 @@
         <h2>ABSENSI LSPKI KAJIMA</h2>
         <p class="welcome-text">Selamat Datang, <b id="userNama">User</b>!</p>
         
+        <!-- Tambahan Elemen Pesan Notifikasi Visual -->
+        <div id="notifikasi" style="display: none; padding: 10px; margin-bottom: 12px; border-radius: 6px; font-weight: bold; font-size: 13px;"></div>
+
         <div id="jam">00:00:00</div>
         
         <div class="action-buttons">
@@ -22,11 +25,17 @@
 
         <div class="history-section">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-    <h3>Riwayat Kehadiran Anda</h3>
-    <button id="btnExport" style="width: auto; padding: 6px 12px; font-size: 12px; background-color: #0f9d58; color: white;">
-        📥 Export CSV
-    </button>
-</div>
+                <h3>Riwayat Kehadiran Anda</h3>
+                <div>
+                    <button id="btnExport" style="width: auto; padding: 6px 12px; font-size: 12px; background-color: #0f9d58; color: white;">
+                        📥 Export CSV
+                    </button>
+                    <!-- Tambahan Tombol Reset -->
+                    <button id="btnReset" style="width: auto; padding: 6px 10px; font-size: 12px; background-color: #d93025; color: white; margin-left: 4px;">
+                        🗑️ Reset
+                    </button>
+                </div>
+            </div>
             <ul id="daftarHadir"></ul>
         </div>
     </div>

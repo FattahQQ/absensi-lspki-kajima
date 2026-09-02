@@ -18,6 +18,27 @@ if (window.location.pathname.includes('dashboard.html')) {
     setInterval(updateJam, 1000);
     updateJam();
 
+    // Fungsi Menampilkan Notifikasi Visual Toast
+    function tampilNotifikasi(pesan, tipe) {
+        const elNotif = document.getElementById('notifikasi');
+        elNotif.innerText = pesan;
+        elNotif.style.display = 'block';
+        
+        if (tipe === 'sukses') {
+            elNotif.style.backgroundColor = '#e6f4ea';
+            elNotif.style.color = '#137333';
+            elNotif.style.border = '1px solid #ceedd5';
+        } else {
+            elNotif.style.backgroundColor = '#fce8e6';
+            elNotif.style.color = '#c5221f';
+            elNotif.style.border = '1px solid #fad2cf';
+        }
+
+        setTimeout(() => {
+            elNotif.style.display = 'none';
+        }, 3000);
+    }
+
     // Tampilkan Riwayat Absen dari LocalStorage
     function muatRiwayatAbsen() {
         const daftarHadir = document.getElementById('daftarHadir');
@@ -61,26 +82,16 @@ if (window.location.pathname.includes('dashboard.html')) {
         
         localStorage.setItem('riwayat_' + sessionUser, JSON.stringify(dataAbsen));
         muatRiwayatAbsen();
+
+        tampilNotifikasi(`Berhasil Absen ${tipe}! Status: ${status}`, 'sukses');
     }
 
-    // Event Listener
-    document.getElementById('btnMasuk').addEventListener('click', () => catatAbsen('MASUK'));
-    document.getElementById('btnKeluar').addEventListener('click', () => catatAbsen('KELUAR'));
-
-    // Logout
-    document.getElementById('btnLogout').addEventListener('click', () => {
-        localStorage.removeItem('sessionUser');
-        window.location.href = 'index.html';
-    });
-
-    // Muat riwayat awal
-    muatRiwayatAbsen();
-// Export CSV
+    // Export CSV
     function exportKeCSV() {
         const dataAbsen = JSON.parse(localStorage.getItem('riwayat_' + sessionUser)) || [];
 
         if (dataAbsen.length === 0) {
-            alert('Belum ada data riwayat absensi untuk di-export!');
+            tampilNotifikasi('Belum ada data riwayat absensi untuk di-export!', 'error');
             return;
         }
 
@@ -98,9 +109,31 @@ if (window.location.pathname.includes('dashboard.html')) {
         
         link.click();
         document.body.removeChild(link);
+
+        tampilNotifikasi('Berhasil mengunduh rekap absensi!', 'sukses');
     }
 
+    // Reset Riwayat
+    function resetRiwayat() {
+        if (confirm('Apakah Anda yakin ingin menghapus seluruh riwayat absensi?')) {
+            localStorage.removeItem('riwayat_' + sessionUser);
+            muatRiwayatAbsen();
+            tampilNotifikasi('Riwayat absensi berhasil dibersihkan.', 'sukses');
+        }
+    }
+
+    // Event Listener
+    document.getElementById('btnMasuk').addEventListener('click', () => catatAbsen('MASUK'));
+    document.getElementById('btnKeluar').addEventListener('click', () => catatAbsen('KELUAR'));
     document.getElementById('btnExport').addEventListener('click', exportKeCSV);
+    document.getElementById('btnReset').addEventListener('click', resetRiwayat);
 
+    // Logout
+    document.getElementById('btnLogout').addEventListener('click', () => {
+        localStorage.removeItem('sessionUser');
+        window.location.href = 'index.html';
+    });
+
+    // Muat riwayat awal
+    muatRiwayatAbsen();
 }
-
