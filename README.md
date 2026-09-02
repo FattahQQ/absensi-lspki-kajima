@@ -15,4 +15,4 @@ Aplikasi web sederhana untuk pencatatan kehadiran (absensi) harian berbasis HTML
 ## 🏃‍♂️ Cara Menjalankan Proyek
 1. *Clone* repositori ini:
    ```bash
-   git clone [https://github.com/FattahQQ/absensi-lspki-kajima.git](https://github.com/FattahQQ/absensi-lspki-kajima.git)
+   git clone https://github.com/FattahQQ/absensi-lspki-kajima.git
